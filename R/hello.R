@@ -53,5 +53,11 @@ hello <- function() {
 # res = rtruncnorm(10000,0,1,0,0.01)
 # mean(cpp_res)
 # mean(res)
-
-
+# save(list = ls(), file = "/Users/yixiang/Library/Mobile Documents/com~apple~CloudDocs/Desktop/Ibrahim/MCEM_CRJoint/tmp_res/tmp_res.RData")
+# load("/Users/yixiang/Library/Mobile Documents/com~apple~CloudDocs/Desktop/Ibrahim/MCEM_CRJoint/tmp_res/tmp_res.RData")
+# Q_function_cpp(
+#   Nobs, nobs, E_r_obs, E_r_rT_obs, Estep_2_obs, yobs, Xobs, Xtte_obs, visittime_obs, tobs, new_id_obs,
+#   Ncen, ncen, E_r_cen, E_r_rT_cen, Estep_2_cen, ycen, Xcen, Xtte_cen, visittime_cen, E_g0_ti, E_ti, E_ti_sq, new_id_cen,
+#   beta_tte, sigma_tte_sq, mu_r, Sigma_r, beta_y, sigma_y_sq,
+#   E_Delta_cen
+# )

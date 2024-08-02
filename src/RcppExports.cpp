@@ -110,6 +110,248 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dSigmadsigmaij_cpp
+arma::mat dSigmadsigmaij_cpp(int i, int j, arma::mat Sigma);
+RcppExport SEXP _MCEMCRJointCPP_dSigmadsigmaij_cpp(SEXP iSEXP, SEXP jSEXP, SEXP SigmaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
+    rcpp_result_gen = Rcpp::wrap(dSigmadsigmaij_cpp(i, j, Sigma));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dldsigmaij_cpp
+double dldsigmaij_cpp(int i, int j, arma::mat Sigma, arma::mat E_ri_riT);
+RcppExport SEXP _MCEMCRJointCPP_dldsigmaij_cpp(SEXP iSEXP, SEXP jSEXP, SEXP SigmaSEXP, SEXP E_ri_riTSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type E_ri_riT(E_ri_riTSEXP);
+    rcpp_result_gen = Rcpp::wrap(dldsigmaij_cpp(i, j, Sigma, E_ri_riT));
+    return rcpp_result_gen;
+END_RCPP
+}
+// vech_cpp
+arma::vec vech_cpp(const arma::mat& mat);
+RcppExport SEXP _MCEMCRJointCPP_vech_cpp(SEXP matSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type mat(matSEXP);
+    rcpp_result_gen = Rcpp::wrap(vech_cpp(mat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dldvechSigma_cpp
+arma::vec dldvechSigma_cpp(arma::mat Sigma, arma::mat E_ri_riT);
+RcppExport SEXP _MCEMCRJointCPP_dldvechSigma_cpp(SEXP SigmaSEXP, SEXP E_ri_riTSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type E_ri_riT(E_ri_riTSEXP);
+    rcpp_result_gen = Rcpp::wrap(dldvechSigma_cpp(Sigma, E_ri_riT));
+    return rcpp_result_gen;
+END_RCPP
+}
+// duplication_matrix_cpp
+arma::mat duplication_matrix_cpp(const int& n);
+RcppExport SEXP _MCEMCRJointCPP_duplication_matrix_cpp(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int& >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(duplication_matrix_cpp(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// elimination_matrix_cpp
+arma::mat elimination_matrix_cpp(const int& n);
+RcppExport SEXP _MCEMCRJointCPP_elimination_matrix_cpp(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int& >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(elimination_matrix_cpp(n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// commutation_matrix_cpp
+arma::mat commutation_matrix_cpp(int m, int n);
+RcppExport SEXP _MCEMCRJointCPP_commutation_matrix_cpp(SEXP mSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type m(mSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(commutation_matrix_cpp(m, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// vechdQdP_cpp
+arma::vec vechdQdP_cpp(const arma::mat& Q);
+RcppExport SEXP _MCEMCRJointCPP_vechdQdP_cpp(SEXP QSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
+    rcpp_result_gen = Rcpp::wrap(vechdQdP_cpp(Q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dldP_cpp
+arma::vec dldP_cpp(const arma::mat& Q, const arma::mat& Sigma, const arma::mat& E_r_rT, const arma::uvec& new_id);
+RcppExport SEXP _MCEMCRJointCPP_dldP_cpp(SEXP QSEXP, SEXP SigmaSEXP, SEXP E_r_rTSEXP, SEXP new_idSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type E_r_rT(E_r_rTSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type new_id(new_idSEXP);
+    rcpp_result_gen = Rcpp::wrap(dldP_cpp(Q, Sigma, E_r_rT, new_id));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dldP_cen_cpp
+arma::vec dldP_cen_cpp(const arma::mat& Q, const arma::mat& Sigma, const arma::mat& E_r_rT, const arma::uvec& new_id, const arma::vec& E_Delta_cen);
+RcppExport SEXP _MCEMCRJointCPP_dldP_cen_cpp(SEXP QSEXP, SEXP SigmaSEXP, SEXP E_r_rTSEXP, SEXP new_idSEXP, SEXP E_Delta_cenSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type E_r_rT(E_r_rTSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type new_id(new_idSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_Delta_cen(E_Delta_cenSEXP);
+    rcpp_result_gen = Rcpp::wrap(dldP_cen_cpp(Q, Sigma, E_r_rT, new_id, E_Delta_cen));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dQdvechP_obs_cpp
+arma::vec dQdvechP_obs_cpp(const arma::mat& Sigma, const arma::mat& E_r_rT, const arma::vec& mu_r, const arma::vec& t, const arma::uvec& new_id);
+RcppExport SEXP _MCEMCRJointCPP_dQdvechP_obs_cpp(SEXP SigmaSEXP, SEXP E_r_rTSEXP, SEXP mu_rSEXP, SEXP tSEXP, SEXP new_idSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type E_r_rT(E_r_rTSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu_r(mu_rSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type t(tSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type new_id(new_idSEXP);
+    rcpp_result_gen = Rcpp::wrap(dQdvechP_obs_cpp(Sigma, E_r_rT, mu_r, t, new_id));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dQdvechP_cen_cpp
+arma::vec dQdvechP_cen_cpp(const arma::mat& Sigma, const arma::mat& E_r_rT, const arma::vec& mu_r, const arma::vec& E_g2_ti, const arma::uvec& new_id, const arma::vec& E_Delta_cen);
+RcppExport SEXP _MCEMCRJointCPP_dQdvechP_cen_cpp(SEXP SigmaSEXP, SEXP E_r_rTSEXP, SEXP mu_rSEXP, SEXP E_g2_tiSEXP, SEXP new_idSEXP, SEXP E_Delta_cenSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type E_r_rT(E_r_rTSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu_r(mu_rSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_g2_ti(E_g2_tiSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type new_id(new_idSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_Delta_cen(E_Delta_cenSEXP);
+    rcpp_result_gen = Rcpp::wrap(dQdvechP_cen_cpp(Sigma, E_r_rT, mu_r, E_g2_ti, new_id, E_Delta_cen));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dQdmur_obs_cpp
+arma::vec dQdmur_obs_cpp(const arma::mat& Sigma, const arma::vec& E_r, const arma::vec& mu_r, const arma::vec& t, const arma::uvec& new_id);
+RcppExport SEXP _MCEMCRJointCPP_dQdmur_obs_cpp(SEXP SigmaSEXP, SEXP E_rSEXP, SEXP mu_rSEXP, SEXP tSEXP, SEXP new_idSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_r(E_rSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu_r(mu_rSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type t(tSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type new_id(new_idSEXP);
+    rcpp_result_gen = Rcpp::wrap(dQdmur_obs_cpp(Sigma, E_r, mu_r, t, new_id));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dQdmur_cen_cpp
+arma::vec dQdmur_cen_cpp(const arma::mat& Sigma, const arma::vec& E_r, const arma::vec& mu_r, const arma::vec& E_g1_ti, const arma::uvec& new_id, const arma::vec& E_Delta_cen);
+RcppExport SEXP _MCEMCRJointCPP_dQdmur_cen_cpp(SEXP SigmaSEXP, SEXP E_rSEXP, SEXP mu_rSEXP, SEXP E_g1_tiSEXP, SEXP new_idSEXP, SEXP E_Delta_cenSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_r(E_rSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu_r(mu_rSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_g1_ti(E_g1_tiSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type new_id(new_idSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_Delta_cen(E_Delta_cenSEXP);
+    rcpp_result_gen = Rcpp::wrap(dQdmur_cen_cpp(Sigma, E_r, mu_r, E_g1_ti, new_id, E_Delta_cen));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Estep_1i_cpp
+double Estep_1i_cpp(int i, const arma::vec& E_ri_all, const arma::mat& E_ri_riT_all, const arma::vec& mu_r, const arma::mat& Sigma_r);
+RcppExport SEXP _MCEMCRJointCPP_Estep_1i_cpp(SEXP iSEXP, SEXP E_ri_allSEXP, SEXP E_ri_riT_allSEXP, SEXP mu_rSEXP, SEXP Sigma_rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_ri_all(E_ri_allSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type E_ri_riT_all(E_ri_riT_allSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu_r(mu_rSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma_r(Sigma_rSEXP);
+    rcpp_result_gen = Rcpp::wrap(Estep_1i_cpp(i, E_ri_all, E_ri_riT_all, mu_r, Sigma_r));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Q_function_cpp
+double Q_function_cpp(int Nobs, int nobs, const arma::vec& E_r_obs, const arma::mat& E_r_rT_obs, const arma::vec& Estep_2_obs, const arma::vec& yobs, const arma::mat& Xobs, const arma::mat& Xtte_obs, const arma::vec& visittime_obs, const arma::vec& tobs, const arma::uvec& new_id_obs, int Ncen, int ncen, const arma::vec& E_r_cen, const arma::mat& E_r_rT_cen, const arma::vec& Estep_2_cen, const arma::vec& ycen, const arma::mat& Xcen, const arma::mat& Xtte_cen, const arma::vec& visittime_cen, const arma::vec& E_g0_ti, const arma::vec& E_ti, const arma::vec& E_ti_sq, const arma::uvec& new_id_cen, const arma::vec& beta_tte, double sigma_tte_sq, const arma::vec& mu_r, const arma::mat& Sigma_r, const arma::vec& beta_y, double sigma_y_sq, const arma::vec& E_Delta_cen);
+RcppExport SEXP _MCEMCRJointCPP_Q_function_cpp(SEXP NobsSEXP, SEXP nobsSEXP, SEXP E_r_obsSEXP, SEXP E_r_rT_obsSEXP, SEXP Estep_2_obsSEXP, SEXP yobsSEXP, SEXP XobsSEXP, SEXP Xtte_obsSEXP, SEXP visittime_obsSEXP, SEXP tobsSEXP, SEXP new_id_obsSEXP, SEXP NcenSEXP, SEXP ncenSEXP, SEXP E_r_cenSEXP, SEXP E_r_rT_cenSEXP, SEXP Estep_2_cenSEXP, SEXP ycenSEXP, SEXP XcenSEXP, SEXP Xtte_cenSEXP, SEXP visittime_cenSEXP, SEXP E_g0_tiSEXP, SEXP E_tiSEXP, SEXP E_ti_sqSEXP, SEXP new_id_cenSEXP, SEXP beta_tteSEXP, SEXP sigma_tte_sqSEXP, SEXP mu_rSEXP, SEXP Sigma_rSEXP, SEXP beta_ySEXP, SEXP sigma_y_sqSEXP, SEXP E_Delta_cenSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type Nobs(NobsSEXP);
+    Rcpp::traits::input_parameter< int >::type nobs(nobsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_r_obs(E_r_obsSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type E_r_rT_obs(E_r_rT_obsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type Estep_2_obs(Estep_2_obsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type yobs(yobsSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Xobs(XobsSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Xtte_obs(Xtte_obsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type visittime_obs(visittime_obsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type tobs(tobsSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type new_id_obs(new_id_obsSEXP);
+    Rcpp::traits::input_parameter< int >::type Ncen(NcenSEXP);
+    Rcpp::traits::input_parameter< int >::type ncen(ncenSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_r_cen(E_r_cenSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type E_r_rT_cen(E_r_rT_cenSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type Estep_2_cen(Estep_2_cenSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type ycen(ycenSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Xcen(XcenSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Xtte_cen(Xtte_cenSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type visittime_cen(visittime_cenSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_g0_ti(E_g0_tiSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_ti(E_tiSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_ti_sq(E_ti_sqSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type new_id_cen(new_id_cenSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type beta_tte(beta_tteSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma_tte_sq(sigma_tte_sqSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu_r(mu_rSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma_r(Sigma_rSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type beta_y(beta_ySEXP);
+    Rcpp::traits::input_parameter< double >::type sigma_y_sq(sigma_y_sqSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type E_Delta_cen(E_Delta_cenSEXP);
+    rcpp_result_gen = Rcpp::wrap(Q_function_cpp(Nobs, nobs, E_r_obs, E_r_rT_obs, Estep_2_obs, yobs, Xobs, Xtte_obs, visittime_obs, tobs, new_id_obs, Ncen, ncen, E_r_cen, E_r_rT_cen, Estep_2_cen, ycen, Xcen, Xtte_cen, visittime_cen, E_g0_ti, E_ti, E_ti_sq, new_id_cen, beta_tte, sigma_tte_sq, mu_r, Sigma_r, beta_y, sigma_y_sq, E_Delta_cen));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_hello
 List rcpp_hello();
 RcppExport SEXP _MCEMCRJointCPP_rcpp_hello() {
@@ -144,6 +386,22 @@ static const R_CallMethodDef CallEntries[] = {
     {"_MCEMCRJointCPP_Z_i_cpp", (DL_FUNC) &_MCEMCRJointCPP_Z_i_cpp, 2},
     {"_MCEMCRJointCPP_Mahalanobis", (DL_FUNC) &_MCEMCRJointCPP_Mahalanobis, 3},
     {"_MCEMCRJointCPP_dmvnorm_arma", (DL_FUNC) &_MCEMCRJointCPP_dmvnorm_arma, 4},
+    {"_MCEMCRJointCPP_dSigmadsigmaij_cpp", (DL_FUNC) &_MCEMCRJointCPP_dSigmadsigmaij_cpp, 3},
+    {"_MCEMCRJointCPP_dldsigmaij_cpp", (DL_FUNC) &_MCEMCRJointCPP_dldsigmaij_cpp, 4},
+    {"_MCEMCRJointCPP_vech_cpp", (DL_FUNC) &_MCEMCRJointCPP_vech_cpp, 1},
+    {"_MCEMCRJointCPP_dldvechSigma_cpp", (DL_FUNC) &_MCEMCRJointCPP_dldvechSigma_cpp, 2},
+    {"_MCEMCRJointCPP_duplication_matrix_cpp", (DL_FUNC) &_MCEMCRJointCPP_duplication_matrix_cpp, 1},
+    {"_MCEMCRJointCPP_elimination_matrix_cpp", (DL_FUNC) &_MCEMCRJointCPP_elimination_matrix_cpp, 1},
+    {"_MCEMCRJointCPP_commutation_matrix_cpp", (DL_FUNC) &_MCEMCRJointCPP_commutation_matrix_cpp, 2},
+    {"_MCEMCRJointCPP_vechdQdP_cpp", (DL_FUNC) &_MCEMCRJointCPP_vechdQdP_cpp, 1},
+    {"_MCEMCRJointCPP_dldP_cpp", (DL_FUNC) &_MCEMCRJointCPP_dldP_cpp, 4},
+    {"_MCEMCRJointCPP_dldP_cen_cpp", (DL_FUNC) &_MCEMCRJointCPP_dldP_cen_cpp, 5},
+    {"_MCEMCRJointCPP_dQdvechP_obs_cpp", (DL_FUNC) &_MCEMCRJointCPP_dQdvechP_obs_cpp, 5},
+    {"_MCEMCRJointCPP_dQdvechP_cen_cpp", (DL_FUNC) &_MCEMCRJointCPP_dQdvechP_cen_cpp, 6},
+    {"_MCEMCRJointCPP_dQdmur_obs_cpp", (DL_FUNC) &_MCEMCRJointCPP_dQdmur_obs_cpp, 5},
+    {"_MCEMCRJointCPP_dQdmur_cen_cpp", (DL_FUNC) &_MCEMCRJointCPP_dQdmur_cen_cpp, 6},
+    {"_MCEMCRJointCPP_Estep_1i_cpp", (DL_FUNC) &_MCEMCRJointCPP_Estep_1i_cpp, 5},
+    {"_MCEMCRJointCPP_Q_function_cpp", (DL_FUNC) &_MCEMCRJointCPP_Q_function_cpp, 31},
     {"_MCEMCRJointCPP_rcpp_hello", (DL_FUNC) &_MCEMCRJointCPP_rcpp_hello, 0},
     {"_MCEMCRJointCPP_rtruncnorm_cpp", (DL_FUNC) &_MCEMCRJointCPP_rtruncnorm_cpp, 5},
     {NULL, NULL, 0}

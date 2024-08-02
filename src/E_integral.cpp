@@ -135,10 +135,10 @@ List MC_int_xy_all_cpp(const arma::vec& s_i, const arma::vec& y_i, double mu_tte
 
   arma::vec omega_i_j_vector = rtruncnorm_cpp(sample_J, lower_bounds, upper_bounds, means, sds);
 
-    arma::mat E_b_i_matrix(sample_J, 3, arma::fill::zeros);
-    arma::mat E_b_i_b_i_T_matrix(sample_J, 9, arma::fill::zeros);
-    arma::mat E_Z_i_b_i_matrix(sample_J, p, arma::fill::zeros);
-    arma::mat E_Z_i_T_Z_i_b_i_b_i_T_matrix(sample_J, 9, arma::fill::zeros);
+  arma::mat E_b_i_matrix(sample_J, 3, arma::fill::zeros);
+  arma::mat E_b_i_b_i_T_matrix(sample_J, 9, arma::fill::zeros);
+  arma::mat E_Z_i_b_i_matrix(sample_J, p, arma::fill::zeros);
+  arma::mat E_Z_i_T_Z_i_b_i_b_i_T_matrix(sample_J, 9, arma::fill::zeros);
 
   for (int j = 0; j < sample_J; ++j) {
     double y = omega_i_j_vector(j);

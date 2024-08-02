@@ -29,6 +29,70 @@ dmvnorm_arma <- function(x, mean, sigma, log) {
     .Call(`_MCEMCRJointCPP_dmvnorm_arma`, x, mean, sigma, log)
 }
 
+dSigmadsigmaij_cpp <- function(i, j, Sigma) {
+    .Call(`_MCEMCRJointCPP_dSigmadsigmaij_cpp`, i, j, Sigma)
+}
+
+dldsigmaij_cpp <- function(i, j, Sigma, E_ri_riT) {
+    .Call(`_MCEMCRJointCPP_dldsigmaij_cpp`, i, j, Sigma, E_ri_riT)
+}
+
+vech_cpp <- function(mat) {
+    .Call(`_MCEMCRJointCPP_vech_cpp`, mat)
+}
+
+dldvechSigma_cpp <- function(Sigma, E_ri_riT) {
+    .Call(`_MCEMCRJointCPP_dldvechSigma_cpp`, Sigma, E_ri_riT)
+}
+
+duplication_matrix_cpp <- function(n) {
+    .Call(`_MCEMCRJointCPP_duplication_matrix_cpp`, n)
+}
+
+elimination_matrix_cpp <- function(n) {
+    .Call(`_MCEMCRJointCPP_elimination_matrix_cpp`, n)
+}
+
+commutation_matrix_cpp <- function(m, n) {
+    .Call(`_MCEMCRJointCPP_commutation_matrix_cpp`, m, n)
+}
+
+vechdQdP_cpp <- function(Q) {
+    .Call(`_MCEMCRJointCPP_vechdQdP_cpp`, Q)
+}
+
+dldP_cpp <- function(Q, Sigma, E_r_rT, new_id) {
+    .Call(`_MCEMCRJointCPP_dldP_cpp`, Q, Sigma, E_r_rT, new_id)
+}
+
+dldP_cen_cpp <- function(Q, Sigma, E_r_rT, new_id, E_Delta_cen) {
+    .Call(`_MCEMCRJointCPP_dldP_cen_cpp`, Q, Sigma, E_r_rT, new_id, E_Delta_cen)
+}
+
+dQdvechP_obs_cpp <- function(Sigma, E_r_rT, mu_r, t, new_id) {
+    .Call(`_MCEMCRJointCPP_dQdvechP_obs_cpp`, Sigma, E_r_rT, mu_r, t, new_id)
+}
+
+dQdvechP_cen_cpp <- function(Sigma, E_r_rT, mu_r, E_g2_ti, new_id, E_Delta_cen) {
+    .Call(`_MCEMCRJointCPP_dQdvechP_cen_cpp`, Sigma, E_r_rT, mu_r, E_g2_ti, new_id, E_Delta_cen)
+}
+
+dQdmur_obs_cpp <- function(Sigma, E_r, mu_r, t, new_id) {
+    .Call(`_MCEMCRJointCPP_dQdmur_obs_cpp`, Sigma, E_r, mu_r, t, new_id)
+}
+
+dQdmur_cen_cpp <- function(Sigma, E_r, mu_r, E_g1_ti, new_id, E_Delta_cen) {
+    .Call(`_MCEMCRJointCPP_dQdmur_cen_cpp`, Sigma, E_r, mu_r, E_g1_ti, new_id, E_Delta_cen)
+}
+
+Estep_1i_cpp <- function(i, E_ri_all, E_ri_riT_all, mu_r, Sigma_r) {
+    .Call(`_MCEMCRJointCPP_Estep_1i_cpp`, i, E_ri_all, E_ri_riT_all, mu_r, Sigma_r)
+}
+
+Q_function_cpp <- function(Nobs, nobs, E_r_obs, E_r_rT_obs, Estep_2_obs, yobs, Xobs, Xtte_obs, visittime_obs, tobs, new_id_obs, Ncen, ncen, E_r_cen, E_r_rT_cen, Estep_2_cen, ycen, Xcen, Xtte_cen, visittime_cen, E_g0_ti, E_ti, E_ti_sq, new_id_cen, beta_tte, sigma_tte_sq, mu_r, Sigma_r, beta_y, sigma_y_sq, E_Delta_cen) {
+    .Call(`_MCEMCRJointCPP_Q_function_cpp`, Nobs, nobs, E_r_obs, E_r_rT_obs, Estep_2_obs, yobs, Xobs, Xtte_obs, visittime_obs, tobs, new_id_obs, Ncen, ncen, E_r_cen, E_r_rT_cen, Estep_2_cen, ycen, Xcen, Xtte_cen, visittime_cen, E_g0_ti, E_ti, E_ti_sq, new_id_cen, beta_tte, sigma_tte_sq, mu_r, Sigma_r, beta_y, sigma_y_sq, E_Delta_cen)
+}
+
 rcpp_hello <- function() {
     .Call(`_MCEMCRJointCPP_rcpp_hello`)
 }
