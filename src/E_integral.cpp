@@ -1,11 +1,15 @@
+#include "E_integral.h"
 #include "rtruncatenormal.h"
 #include "basic_functions.h"
 #include "dmvtnormal.h"
 #include <RcppArmadillo.h>
 #include <Rcpp.h>
+#include <chrono>
+
 // [[Rcpp::depends(RcppArmadillo, mvtnorm)]]
 
 using namespace Rcpp;
+using namespace std::chrono;
 
 arma::mat create_f_vector_matrix(const arma::vec& f_vector, int n_cols) {
   arma::mat f_vector_matrix = repmat(f_vector, 1, n_cols);
@@ -94,7 +98,14 @@ arma::vec col_means(const arma::mat& X) {
 // [[Rcpp::export]]
 List MC_int_xy_all_cpp(const arma::vec& s_i, const arma::vec& y_i, double mu_tte, double sd_tte,
                        const arma::vec& mu_y, double sigma_y_sq, const arma::vec& mu_r, const arma::mat& sigma_r,
-                       int sample_J, double x_min, bool obs = false) {
+                       int sample_J, double x_min, bool obs) {
+  // record time
+  // Time point variables
+  auto start = steady_clock::now();
+  auto end = steady_clock::now();
+
+  start = steady_clock::now();
+
   int p = s_i.n_elem;
   double mu_omega = mu_r[0];
   arma::vec mu_b = mu_r.subvec(1, mu_r.n_elem - 1);
@@ -135,6 +146,13 @@ List MC_int_xy_all_cpp(const arma::vec& s_i, const arma::vec& y_i, double mu_tte
 
   arma::vec omega_i_j_vector = rtruncnorm_cpp(sample_J, lower_bounds, upper_bounds, means, sds);
 
+  // record time
+  end = steady_clock::now();
+  // Rcout << "Sampling time: " << duration<double>(end - start).count() << " seconds\n";
+
+  start = steady_clock::now();
+
+
   arma::mat E_b_i_matrix(sample_J, 3, arma::fill::zeros);
   arma::mat E_b_i_b_i_T_matrix(sample_J, 9, arma::fill::zeros);
   arma::mat E_Z_i_b_i_matrix(sample_J, p, arma::fill::zeros);
@@ -146,6 +164,7 @@ List MC_int_xy_all_cpp(const arma::vec& s_i, const arma::vec& y_i, double mu_tte
 
     arma::vec mean_vec = mu_y + Z_i_result * (mu_b + sigma_bomega / sigma_omega_sq * (y - mu_omega));
     arma::mat sigma_matrix = sigma_y_sq * arma::eye(p, p) + Z_i_result * (sigma_b - 1 / sigma_omega_sq * sigma_bomega * sigma_bomega.t()) * Z_i_result.t();
+    arma::mat inv_sigma_matrix = inv(sigma_matrix);
 
     arma::rowvec y_i_matrix = y_i.t();
     arma::rowvec mean_vec_row = mean_vec.t();
@@ -155,11 +174,11 @@ List MC_int_xy_all_cpp(const arma::vec& s_i, const arma::vec& y_i, double mu_tte
 
     arma::vec E_b_i = mu_b + sigma_bomega / sigma_omega_sq * (y - mu_omega) +
       (sigma_b - 1 / sigma_omega_sq * sigma_bomega * sigma_bomega.t()) * Z_i_result.t() *
-      inv(sigma_matrix) * (y_i - mean_vec);
+      inv_sigma_matrix * (y_i - mean_vec);
 
     arma::mat Var_b_i = (sigma_b - 1 / sigma_omega_sq * sigma_bomega * sigma_bomega.t()) -
       (sigma_b - 1 / sigma_omega_sq * sigma_bomega * sigma_bomega.t()) * Z_i_result.t() *
-      inv(sigma_matrix) * trans((sigma_b - 1 / sigma_omega_sq * sigma_bomega * sigma_bomega.t()) * Z_i_result.t());
+      inv_sigma_matrix * trans((sigma_b - 1 / sigma_omega_sq * sigma_bomega * sigma_bomega.t()) * Z_i_result.t());
     arma::mat E_b_i_b_i_T = E_b_i * E_b_i.t() + Var_b_i;
 
     E_b_i_matrix.row(j) = E_b_i.t();
@@ -167,6 +186,11 @@ List MC_int_xy_all_cpp(const arma::vec& s_i, const arma::vec& y_i, double mu_tte
     E_Z_i_b_i_matrix.row(j) = (Z_i_result * E_b_i).t();
     E_Z_i_T_Z_i_b_i_b_i_T_matrix.row(j) = vectorise(Z_i_result.t() * Z_i_result * E_b_i_b_i_T).t();
   }
+  // record time
+  end = steady_clock::now();
+  // Rcout << "Integral time: " << duration<double>(end - start).count() << " seconds\n";
+  start = steady_clock::now();
+
 
   double E_denominator = mean(f_vector);
   double E_ti = mean(t_i_j_vector % f_vector);
@@ -202,6 +226,9 @@ List MC_int_xy_all_cpp(const arma::vec& s_i, const arma::vec& y_i, double mu_tte
   arma::mat E_Z_i_T_Z_i_b_i_b_i_T = reshape(col_means(E_Z_i_T_Z_i_b_i_b_i_T_matrix % f_vector_matrix_9), 3, 3);
 
   double E_Z_i_b_i_sq = trace(E_Z_i_T_Z_i_b_i_b_i_T);
+  // record time
+  end = steady_clock::now();
+  // Rcout << "Final computations time: " << duration<double>(end - start).count() << " seconds\n";
 
   return List::create(Named("E_denominator") = E_denominator,
                       Named("E_ti") = E_ti, Named("E_ti_sq") = E_ti_sq,

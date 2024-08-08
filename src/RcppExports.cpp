@@ -32,6 +32,72 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// E_test
+void E_test(const arma::vec& visittime_cen, const arma::vec& new_id_cen, const arma::mat& Xcen);
+RcppExport SEXP _MCEMCRJointCPP_E_test(SEXP visittime_cenSEXP, SEXP new_id_cenSEXP, SEXP XcenSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type visittime_cen(visittime_cenSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type new_id_cen(new_id_cenSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Xcen(XcenSEXP);
+    E_test(visittime_cen, new_id_cen, Xcen);
+    return R_NilValue;
+END_RCPP
+}
+// E_loop_obs_cpp
+List E_loop_obs_cpp(const arma::vec& visittime_obs, const arma::vec& new_id_obs, const arma::mat& Xobs, const arma::vec& yobs, const arma::mat& Xtte_obs, const arma::vec& tobs, const arma::vec& beta_y, const arma::vec& beta_tte, double sigma_tte_sq, double sigma_y_sq, const arma::vec& mu_r, const arma::mat& Sigma_r, int nobs, int Nobs, int Sample_J);
+RcppExport SEXP _MCEMCRJointCPP_E_loop_obs_cpp(SEXP visittime_obsSEXP, SEXP new_id_obsSEXP, SEXP XobsSEXP, SEXP yobsSEXP, SEXP Xtte_obsSEXP, SEXP tobsSEXP, SEXP beta_ySEXP, SEXP beta_tteSEXP, SEXP sigma_tte_sqSEXP, SEXP sigma_y_sqSEXP, SEXP mu_rSEXP, SEXP Sigma_rSEXP, SEXP nobsSEXP, SEXP NobsSEXP, SEXP Sample_JSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type visittime_obs(visittime_obsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type new_id_obs(new_id_obsSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Xobs(XobsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type yobs(yobsSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Xtte_obs(Xtte_obsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type tobs(tobsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type beta_y(beta_ySEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type beta_tte(beta_tteSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma_tte_sq(sigma_tte_sqSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma_y_sq(sigma_y_sqSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu_r(mu_rSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma_r(Sigma_rSEXP);
+    Rcpp::traits::input_parameter< int >::type nobs(nobsSEXP);
+    Rcpp::traits::input_parameter< int >::type Nobs(NobsSEXP);
+    Rcpp::traits::input_parameter< int >::type Sample_J(Sample_JSEXP);
+    rcpp_result_gen = Rcpp::wrap(E_loop_obs_cpp(visittime_obs, new_id_obs, Xobs, yobs, Xtte_obs, tobs, beta_y, beta_tte, sigma_tte_sq, sigma_y_sq, mu_r, Sigma_r, nobs, Nobs, Sample_J));
+    return rcpp_result_gen;
+END_RCPP
+}
+// E_loop_cpp
+List E_loop_cpp(const arma::vec& visittime_cen, const arma::vec& new_id_cen, const arma::mat& Xcen, const arma::vec& ycen, const arma::mat& Xtte_cen, const arma::vec& tcen, const arma::vec& beta_y, const arma::vec& beta_tte, double sigma_tte_sq, double sigma_y_sq, const arma::vec& mu_r, const arma::mat& Sigma_r, const arma::vec mu_r_cure, const arma::mat Sigma_r_cure, const arma::vec beta_cure, double sigma_y_cure_sq, int ncen, int Ncen, int Sample_J);
+RcppExport SEXP _MCEMCRJointCPP_E_loop_cpp(SEXP visittime_cenSEXP, SEXP new_id_cenSEXP, SEXP XcenSEXP, SEXP ycenSEXP, SEXP Xtte_cenSEXP, SEXP tcenSEXP, SEXP beta_ySEXP, SEXP beta_tteSEXP, SEXP sigma_tte_sqSEXP, SEXP sigma_y_sqSEXP, SEXP mu_rSEXP, SEXP Sigma_rSEXP, SEXP mu_r_cureSEXP, SEXP Sigma_r_cureSEXP, SEXP beta_cureSEXP, SEXP sigma_y_cure_sqSEXP, SEXP ncenSEXP, SEXP NcenSEXP, SEXP Sample_JSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type visittime_cen(visittime_cenSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type new_id_cen(new_id_cenSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Xcen(XcenSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type ycen(ycenSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Xtte_cen(Xtte_cenSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type tcen(tcenSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type beta_y(beta_ySEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type beta_tte(beta_tteSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma_tte_sq(sigma_tte_sqSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma_y_sq(sigma_y_sqSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type mu_r(mu_rSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma_r(Sigma_rSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu_r_cure(mu_r_cureSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma_r_cure(Sigma_r_cureSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type beta_cure(beta_cureSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma_y_cure_sq(sigma_y_cure_sqSEXP);
+    Rcpp::traits::input_parameter< int >::type ncen(ncenSEXP);
+    Rcpp::traits::input_parameter< int >::type Ncen(NcenSEXP);
+    Rcpp::traits::input_parameter< int >::type Sample_J(Sample_JSEXP);
+    rcpp_result_gen = Rcpp::wrap(E_loop_cpp(visittime_cen, new_id_cen, Xcen, ycen, Xtte_cen, tcen, beta_y, beta_tte, sigma_tte_sq, sigma_y_sq, mu_r, Sigma_r, mu_r_cure, Sigma_r_cure, beta_cure, sigma_y_cure_sq, ncen, Ncen, Sample_J));
+    return rcpp_result_gen;
+END_RCPP
+}
 // g_0_cpp
 arma::vec g_0_cpp(const arma::vec& t, double mu_omega, double sigma_omega);
 RcppExport SEXP _MCEMCRJointCPP_g_0_cpp(SEXP tSEXP, SEXP mu_omegaSEXP, SEXP sigma_omegaSEXP) {
@@ -380,6 +446,9 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_MCEMCRJointCPP_MC_int_xy_all_cpp", (DL_FUNC) &_MCEMCRJointCPP_MC_int_xy_all_cpp, 11},
+    {"_MCEMCRJointCPP_E_test", (DL_FUNC) &_MCEMCRJointCPP_E_test, 3},
+    {"_MCEMCRJointCPP_E_loop_obs_cpp", (DL_FUNC) &_MCEMCRJointCPP_E_loop_obs_cpp, 15},
+    {"_MCEMCRJointCPP_E_loop_cpp", (DL_FUNC) &_MCEMCRJointCPP_E_loop_cpp, 19},
     {"_MCEMCRJointCPP_g_0_cpp", (DL_FUNC) &_MCEMCRJointCPP_g_0_cpp, 3},
     {"_MCEMCRJointCPP_g_1_cpp", (DL_FUNC) &_MCEMCRJointCPP_g_1_cpp, 3},
     {"_MCEMCRJointCPP_g_2_cpp", (DL_FUNC) &_MCEMCRJointCPP_g_2_cpp, 3},

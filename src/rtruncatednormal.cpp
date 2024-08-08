@@ -5,7 +5,8 @@
 #include <RcppArmadillo.h>
 #include <Rcpp.h>
 #include <cmath>
-
+// #include <RcppDist.h>
+//// [[Rcpp::depends(RcppArmadillo, RcppDist)]]
 // [[Rcpp::depends(RcppArmadillo)]]
 
 using namespace Rcpp;
@@ -99,7 +100,7 @@ double r_righttruncnorm(double b, double mean, double sd) {
 }
 
 // Helper function to perform Truncated Normal Sampling
-double r_truncnorm(double a, double b, double mean, double sd) {
+double r_truncnorm_my(double a, double b, double mean, double sd) {
   const double alpha = (a - mean) / sd;
   const double beta = (b - mean) / sd;
   const double phi_a = R::dnorm(alpha, 0.0, 1.0, false);
@@ -154,7 +155,7 @@ arma::vec rtruncnorm_cpp(int n, arma::vec a, arma::vec b, arma::vec mean, arma::
     } else if (cb == R_PosInf) {
       ret[i] = r_lefttruncnorm(ca, cmean, csd);
     } else {
-      ret[i] = r_truncnorm(ca, cb, cmean, csd);
+      ret[i] = r_truncnorm_my(ca, cb, cmean, csd);
     }
   }
 
@@ -162,4 +163,15 @@ arma::vec rtruncnorm_cpp(int n, arma::vec a, arma::vec b, arma::vec mean, arma::
 }
 
 
-
+// // [[Rcpp::export]]
+// Rcpp::NumericVector rtruncnorm_function(const int n, Rcpp::NumericVector a, Rcpp::NumericVector b, Rcpp::NumericVector mu, Rcpp::NumericVector sigma) {
+//   Rcpp::NumericVector x(n);
+//   for (int i = 0; i < n; i++) {
+//     NumericVector result = rtruncnorm(1, mu[i], sigma[i], a[i], b[i]);
+//     x[i] = result[0];
+//     }
+//   return x;
+// }
+//
+// Rcpp::NumericVector rtruncnorm(const int n, const double mu,
+// const double sigma, const double a, const double b)

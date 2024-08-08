@@ -61,3 +61,23 @@ hello <- function() {
 #   beta_tte, sigma_tte_sq, mu_r, Sigma_r, beta_y, sigma_y_sq,
 #   E_Delta_cen
 # )
+# cpp_res = rtruncnorm_cpp(10000,rep(0,10000),rep(1,10000),rep(0,10000),rep(0.01,10000))
+# cpp_res_2 = rtruncnorm_function(10000,rep(0,10000),rep(1,10000),rep(0,10000),rep(0.01,10000))
+#
+# library(microbenchmark)
+#
+# n <- 10000
+# a <- rep(0, n)
+# b <- rep(1, n)
+# mu <- rep(0, n)
+# sigma <- rep(0.01, n)
+#
+# # Benchmark the functions
+# benchmark_results <- microbenchmark(
+#   cpp_res = rtruncnorm_cpp(n, a, b, mu, sigma),
+#   cpp_res_2 = rtruncnorm_function(n, a, b, mu, sigma),
+#   times = 100  # Number of times to run each function for benchmarking
+# )
+#
+# # Print the results
+# print(benchmark_results)
