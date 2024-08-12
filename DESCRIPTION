@@ -12,4 +12,4 @@ LazyData: false
 Imports: Rcpp (>= 0.11.0), RcppArmadillo (>= 0.9.850.1.0)
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.3.2
-Depends: mvtnorm, survival, ks, psych
+Depends: mvtnorm, survival, ks, psych, TruncatedNormal, randcorr, dplyr, Rlab
