@@ -6,7 +6,6 @@
 using namespace Rcpp;
 using namespace arma;
 
-
 arma::mat Z_ci_cpp(const arma::vec& visittime_vec_i) {
   int n = visittime_vec_i.n_elem;
   arma::mat result(n, 2, fill::ones);  // Initialize a matrix with n rows and 2 columns filled with ones

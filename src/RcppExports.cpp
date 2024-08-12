@@ -418,16 +418,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcpp_hello
-List rcpp_hello();
-RcppExport SEXP _MCEMCRJointCPP_rcpp_hello() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_hello());
-    return rcpp_result_gen;
-END_RCPP
-}
 // rtruncnorm_cpp
 arma::vec rtruncnorm_cpp(int n, arma::vec a, arma::vec b, arma::vec mean, arma::vec sd);
 RcppExport SEXP _MCEMCRJointCPP_rtruncnorm_cpp(SEXP nSEXP, SEXP aSEXP, SEXP bSEXP, SEXP meanSEXP, SEXP sdSEXP) {
@@ -471,7 +461,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_MCEMCRJointCPP_dQdmur_cen_cpp", (DL_FUNC) &_MCEMCRJointCPP_dQdmur_cen_cpp, 6},
     {"_MCEMCRJointCPP_Estep_1i_cpp", (DL_FUNC) &_MCEMCRJointCPP_Estep_1i_cpp, 5},
     {"_MCEMCRJointCPP_Q_function_cpp", (DL_FUNC) &_MCEMCRJointCPP_Q_function_cpp, 31},
-    {"_MCEMCRJointCPP_rcpp_hello", (DL_FUNC) &_MCEMCRJointCPP_rcpp_hello, 0},
     {"_MCEMCRJointCPP_rtruncnorm_cpp", (DL_FUNC) &_MCEMCRJointCPP_rtruncnorm_cpp, 5},
     {NULL, NULL, 0}
 };

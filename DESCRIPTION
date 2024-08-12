@@ -8,7 +8,8 @@ Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?
 Encoding: UTF-8
-LazyData: true
-Imports: Rcpp (>= 0.11.0), RcppArmadillo (>= 0.9.850.1.0), mvtnorm
+LazyData: false
+Imports: Rcpp (>= 0.11.0), RcppArmadillo (>= 0.9.850.1.0)
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.3.2
+Depends: mvtnorm, survival, ks, psych
