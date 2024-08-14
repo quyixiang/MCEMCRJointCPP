@@ -153,8 +153,8 @@ MCEM_cureJoint <- function(data.list, tol = 1e-6, maxIter = 1000, initial = NULL
 
     Sigma_r_new <- vechP2Sigma(vechP_new)
 
-    par_old <- c(mu_r, vechP, beta_y, sigma_y_sq, beta_tte, sigma_tte_sq)
-    par_new <- c(mu_r_new, vechP_new, beta_y_new, sigma_y_sq_new, beta_tte_new, sigma_tte_sq_new)
+    par_old <- c(mu_r, vech(Sigma_r), beta_y, sigma_y_sq, beta_tte, sigma_tte_sq, pi_c, beta_cure, mu_r_cure, vech(Sigma_r_cure), sigma_y_cure_sq)
+    par_new <- c(mu_r_new, vech(Sigma_r_new), beta_y_new, sigma_y_sq_new, beta_tte_new, sigma_tte_sq_new, pi_c_new, beta_cure_new, mu_r_cure_new, vech(Sigma_r_cure_new), sigma_y_cure_sq_new)
 
     eps <- sqrt(abs(sum((par_old - par_new)^2) / (sum(par_old))^2))
     print(eps)

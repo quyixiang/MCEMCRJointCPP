@@ -55,7 +55,7 @@
 # fmla.long = as.formula(PCHG ~ 0 + Y0SCALE)
 # longdat.time <- "visittime"
 # id.indicator <- "id"
-
+# infer_CRJoint_MLE(survdat, longdat, init, fmla.tte, fmla.long, longdat.time, id.indicator)
 
 infer_CRJoint_MLE <- function(survdat, longdat, init, fmla.tte, fmla.long, longdat.time, id.indicator, maxIter = 5000, tol = 8e-4) {
   data.list <- load_onearm_data(
