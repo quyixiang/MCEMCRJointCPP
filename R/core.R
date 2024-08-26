@@ -113,8 +113,6 @@ MCEM_cureJoint <- function(data.list, tol = 1e-6, maxIter = 1000, initial = NULL
     )
 
     mu_r_new <- mu_r
-
-
     tryCatch(
       {
         mu_optim <- optim(
@@ -129,29 +127,33 @@ MCEM_cureJoint <- function(data.list, tol = 1e-6, maxIter = 1000, initial = NULL
         mu_r_new <- mu_optim$par
       },
       error = function(e) {
-        cat("An error occurred during optimization: ", e$message, "\n")
       }
     )
 
+    vechP_new <- vechP
+    Sigma_r_new <- vechP2Sigma(vechP)
+    tryCatch(
+      {
+        P_optim <- optim(
+          par = vechP, fn = wrapped_Q_function_sigma, gr = wrapped_gradient_function_sigma,
+          method = "L-BFGS-B", # lower = c(-4, -10, -10, -10, -4, -10, -10, -4, -10, -4), upper = c(4, 10, 10, 10, 4, 10, 10, 4, 10, -4),
+          lower = rep(-2, 10), upper = rep(2, 10),
+          control = list(fnscale = -1),
+          Nobs = Nobs, nobs = nobs, E_r_obs = E_r_obs, E_r_rT_obs = E_r_rT_obs, E_r_rT_mu_obs = E_r_rT_mu_obs, Estep_2_obs = Estep_2_obs, yobs = yobs, Xobs = Xobs, Xtte_obs = Xtte_obs,
+          visittime_obs = visittime_obs, tobs = tobs, new_id_obs = new_id_obs,
+          Ncen = Ncen, ncen = ncen, E_r_cen = E_r_cen, E_r_rT_cen = E_r_rT_cen, E_r_rT_mu_cen = E_r_rT_mu_cen, Estep_2_cen = Estep_2_cen, ycen = ycen, Xcen = Xcen, Xtte_cen = Xtte_cen,
+          visittime_cen = visittime_cen, E_ti = E_t_cen, E_ti_sq = E_t_sq_cen, E_g0_ti = E_g0_t_cen, E_g1_ti = E_g1_t_cen, E_g2_ti = E_g2_t_cen, new_id_cen = new_id_cen,
+          beta_tte = beta_tte, sigma_tte_sq = sigma_tte_sq, beta_y = beta_y, sigma_y_sq = sigma_y_sq, E_Delta_cen = E_Delta_cen,
+          mu_r = mu_r
+        )
 
+        vechP_new <- P_optim$par
 
-    P_optim <- optim(
-      par = vechP, fn = wrapped_Q_function_sigma, gr = wrapped_gradient_function_sigma,
-      method = "L-BFGS-B", # lower = c(-4, -10, -10, -10, -4, -10, -10, -4, -10, -4), upper = c(4, 10, 10, 10, 4, 10, 10, 4, 10, -4),
-      lower = rep(-2, 10), upper = rep(2, 10),
-      control = list(fnscale = -1),
-      Nobs = Nobs, nobs = nobs, E_r_obs = E_r_obs, E_r_rT_obs = E_r_rT_obs, E_r_rT_mu_obs = E_r_rT_mu_obs, Estep_2_obs = Estep_2_obs, yobs = yobs, Xobs = Xobs, Xtte_obs = Xtte_obs,
-      visittime_obs = visittime_obs, tobs = tobs, new_id_obs = new_id_obs,
-      Ncen = Ncen, ncen = ncen, E_r_cen = E_r_cen, E_r_rT_cen = E_r_rT_cen, E_r_rT_mu_cen = E_r_rT_mu_cen, Estep_2_cen = Estep_2_cen, ycen = ycen, Xcen = Xcen, Xtte_cen = Xtte_cen,
-      visittime_cen = visittime_cen, E_ti = E_t_cen, E_ti_sq = E_t_sq_cen, E_g0_ti = E_g0_t_cen, E_g1_ti = E_g1_t_cen, E_g2_ti = E_g2_t_cen, new_id_cen = new_id_cen,
-      beta_tte = beta_tte, sigma_tte_sq = sigma_tte_sq, beta_y = beta_y, sigma_y_sq = sigma_y_sq, E_Delta_cen = E_Delta_cen,
-      mu_r = mu_r
+        Sigma_r_new <- vechP2Sigma(vechP_new)
+      },
+      error = function(e) {
+      }
     )
-
-
-    vechP_new <- P_optim$par
-
-    Sigma_r_new <- vechP2Sigma(vechP_new)
 
     par_old <- c(mu_r, vech(Sigma_r), beta_y, sigma_y_sq, beta_tte, sigma_tte_sq, pi_c, beta_cure, mu_r_cure, vech(Sigma_r_cure), sigma_y_cure_sq)
     par_new <- c(mu_r_new, vech(Sigma_r_new), beta_y_new, sigma_y_sq_new, beta_tte_new, sigma_tte_sq_new, pi_c_new, beta_cure_new, mu_r_cure_new, vech(Sigma_r_cure_new), sigma_y_cure_sq_new)
