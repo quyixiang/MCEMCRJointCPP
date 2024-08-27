@@ -176,7 +176,7 @@ arma::vec dQdvechP_cen_cpp(const arma::mat& Sigma, const arma::mat& E_r_rT, cons
   // Assuming dldP_cen_cpp is already defined and works appropriately
   arma::vec first = dldP_cen_cpp(Qr, Sigma, E_r_rT, new_id, E_Delta_cen);
 
-  double second = -arma::accu(E_g2_ti);
+  double second = -arma::accu(E_g2_ti % (1 - E_Delta_cen));
 
   arma::vec result = first;
   result(0) += second;
