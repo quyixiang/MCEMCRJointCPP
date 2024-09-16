@@ -112,10 +112,20 @@ MCEM_cureJoint <- function(data.list, tol = 1e-6, maxIter = 1000, initial = NULL
     sigma_tte_sq_new <- sigma_tte_sq_update(nobs, ncen, Xtte_obs, Xtte_cen, tobs, E_t_cen, E_t_sq_cen, beta_tte, E_Delta_cen)
 
     if (!(no_cure)) {
-      mu_r_cure_new <- mu_r_cure_update(ncen, Sigma_r_cure, E_b_cure, E_Delta_cen)
-      Sigma_r_cure_new <- Sigma_r_cure_update(ncen, E_b_b_T_mu_cure, E_Delta_cen)
-      beta_cure_new <- beta_cure_update(ncen, Xcen, ycen, visittime_cen, new_id_cen, E_b_cure, E_Delta_cen)
-      sigma_y_cure_sq_new <- sigma_y_cure_sq_update(ncen, Xcen, ycen, visittime_cen, new_id_cen, beta_cure, mu_r_cure, E_b_cure, E_b_b_T_mu_cure, E_Delta_cen)
+      mu_r_cure_new <- mu_r_cure
+      Sigma_r_cure_new <- Sigma_r_cure
+      beta_cure_new <- beta_cure
+      sigma_y_cure_sq_new <- sigma_y_cure_sq
+      tryCatch(
+        {
+          mu_r_cure_new <- mu_r_cure_update(ncen, Sigma_r_cure, E_b_cure, E_Delta_cen)
+          Sigma_r_cure_new <- Sigma_r_cure_update(ncen, E_b_b_T_mu_cure, E_Delta_cen)
+          beta_cure_new <- beta_cure_update(ncen, Xcen, ycen, visittime_cen, new_id_cen, E_b_cure, E_Delta_cen)
+          sigma_y_cure_sq_new <- sigma_y_cure_sq_update(ncen, Xcen, ycen, visittime_cen, new_id_cen, beta_cure, mu_r_cure, E_b_cure, E_b_b_T_mu_cure, E_Delta_cen)
+        },
+        error = function(e) {
+        }
+      )
     } else {
       mu_r_cure_new <- mu_r_cure
       Sigma_r_cure_new <- Sigma_r_cure
