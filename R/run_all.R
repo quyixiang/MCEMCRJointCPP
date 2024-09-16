@@ -57,7 +57,7 @@
 # id.indicator <- "id"
 # infer_CRJoint_MLE(survdat, longdat, init, fmla.tte, fmla.long, longdat.time, id.indicator)
 
-infer_CRJoint_MLE <- function(survdat, longdat, init, fmla.tte, fmla.long, longdat.time, id.indicator, maxIter = 5000, tol = 8e-4) {
+infer_CRJoint_MLE <- function(survdat, longdat, init, fmla.tte, fmla.long, longdat.time, id.indicator, maxIter = 5000, tol = 8e-4, no_cure = FALSE) {
   data.list <- load_onearm_data(
     survdat = survdat,
     longdat = longdat,
@@ -72,5 +72,5 @@ infer_CRJoint_MLE <- function(survdat, longdat, init, fmla.tte, fmla.long, longd
   data.list[["tobs"]] <- log(data.list[["tobs"]])
 
 
-  cure_res <- MCEM_cureJoint(data.list, initial = init, maxIter = maxIter, tol = tol)
+  cure_res <- MCEM_cureJoint(data.list, initial = init, maxIter = maxIter, tol = tol, no_cure = no_cure)
 }

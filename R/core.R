@@ -1,4 +1,4 @@
-MCEM_cureJoint <- function(data.list, tol = 1e-6, maxIter = 1000, initial = NULL, gamma = 0.0001) {
+MCEM_cureJoint <- function(data.list, tol = 1e-6, maxIter = 1000, initial = NULL, gamma = 0.0001, no_cure = FALSE) {
   nobs <- data.list[["nobs"]]
   ncen <- data.list[["ncen"]]
   visittime_obs <- data.list[["visitobs"]]
@@ -20,18 +20,22 @@ MCEM_cureJoint <- function(data.list, tol = 1e-6, maxIter = 1000, initial = NULL
   p <- dim(Xobs)[2]
   ptte <- dim(Xtte_obs)[2]
   if (is.null(initial)) {
-    Sigma_r <- Sigma_r_init_long
-    mu_r <- mu_r_init_long
+    Sigma_r_Q <- diag(c(0.3, 0.3, 0.3, 0.3))
+    Sigma_r <- Sigma_r_Q %*% t(Sigma_r_Q)
+    mu_r <- c(0.5, 0, -0.5, 0.5)
     beta_y <- rep(0, p)
     sigma_y_sq <- 1
     beta_tte <- rep(0, ptte)
     sigma_tte_sq <- 0.06
-
-    pi_c <- 0.4 - 0.15
-    beta_cure <- rep(-0.2, p) + 0.2
-    mu_r_cure <- c(0, -0.5) + 0.25
-    Sigma_r_cure <- Sigma_r_cure - 0.02
-    sigma_y_cure_sq <- 0.04 + 1
+    mu_r_cure <- rep(0, 2)
+    Sigma_r_cure <- diag(c(0.2, 0.2))
+    beta_cure <- rep(0, p)
+    sigma_y_cure_sq <- 0.01
+    if (!(no_cure)) {
+      pi_c <- 0.4
+    } else {
+      pi_c <- 0
+    }
   } else {
     mu_r <- initial[["mu_r"]]
     Sigma_r <- initial[["Sigma_r"]]
@@ -40,11 +44,19 @@ MCEM_cureJoint <- function(data.list, tol = 1e-6, maxIter = 1000, initial = NULL
     beta_tte <- initial[["beta_tte"]]
     sigma_tte_sq <- initial[["sigma_tte_sq"]]
 
-    pi_c <- initial[["pi_c"]]
-    beta_cure <- initial[["beta_cure"]]
-    mu_r_cure <- initial[["mu_r_cure"]]
-    Sigma_r_cure <- initial[["Sigma_r_cure"]]
-    sigma_y_cure_sq <- initial[["sigma_y_cure_sq"]]
+    if (!(no_cure)) {
+      pi_c <- initial[["pi_c"]]
+      beta_cure <- initial[["beta_cure"]]
+      mu_r_cure <- initial[["mu_r_cure"]]
+      Sigma_r_cure <- initial[["Sigma_r_cure"]]
+      sigma_y_cure_sq <- initial[["sigma_y_cure_sq"]]
+    } else {
+      pi_c <- 0
+      mu_r_cure <- rep(0, 2)
+      Sigma_r_cure <- diag(c(0.2, 0.2))
+      beta_cure <- rep(0, p)
+      sigma_y_cure_sq <- 0.01
+    }
   }
 
 
@@ -79,8 +91,10 @@ MCEM_cureJoint <- function(data.list, tol = 1e-6, maxIter = 1000, initial = NULL
     E_r_rT_mu_cen <- E_loop_cpp_res[["E_r_rT_mu_cen"]]
     E_Z_b_cen <- E_loop_cpp_res[["E_Z_b_cen"]]
     Estep_2_cen <- E_loop_cpp_res[["Estep_2_cen"]]
-    E_b_cure <- E_loop_cpp_res[["E_b_cure"]]
-    E_b_b_T_mu_cure <- E_loop_cpp_res[["E_b_b_T_mu_cure"]]
+    if (!(no_cure)) {
+      E_b_cure <- E_loop_cpp_res[["E_b_cure"]]
+      E_b_b_T_mu_cure <- E_loop_cpp_res[["E_b_b_T_mu_cure"]]
+    }
 
     E_Delta_cen <- pi_c * E_Delta1 / (pi_c * E_Delta1 + (1 - pi_c) * E_denominator_cen)
     end_time_Estep <- Sys.time()
@@ -97,11 +111,17 @@ MCEM_cureJoint <- function(data.list, tol = 1e-6, maxIter = 1000, initial = NULL
     beta_tte_new <- beta_tte_update(nobs, ncen, Xtte_obs, Xtte_cen, tobs, E_t_cen, E_Delta_cen)
     sigma_tte_sq_new <- sigma_tte_sq_update(nobs, ncen, Xtte_obs, Xtte_cen, tobs, E_t_cen, E_t_sq_cen, beta_tte, E_Delta_cen)
 
-    mu_r_cure_new <- mu_r_cure_update(ncen, Sigma_r_cure, E_b_cure, E_Delta_cen)
-    Sigma_r_cure_new <- Sigma_r_cure_update(ncen, E_b_b_T_mu_cure, E_Delta_cen)
-    beta_cure_new <- beta_cure_update(ncen, Xcen, ycen, visittime_cen, new_id_cen, E_b_cure, E_Delta_cen)
-    sigma_y_cure_sq_new <- sigma_y_cure_sq_update(ncen, Xcen, ycen, visittime_cen, new_id_cen, beta_cure, mu_r_cure, E_b_cure, E_b_b_T_mu_cure, E_Delta_cen)
-
+    if (!(no_cure)) {
+      mu_r_cure_new <- mu_r_cure_update(ncen, Sigma_r_cure, E_b_cure, E_Delta_cen)
+      Sigma_r_cure_new <- Sigma_r_cure_update(ncen, E_b_b_T_mu_cure, E_Delta_cen)
+      beta_cure_new <- beta_cure_update(ncen, Xcen, ycen, visittime_cen, new_id_cen, E_b_cure, E_Delta_cen)
+      sigma_y_cure_sq_new <- sigma_y_cure_sq_update(ncen, Xcen, ycen, visittime_cen, new_id_cen, beta_cure, mu_r_cure, E_b_cure, E_b_b_T_mu_cure, E_Delta_cen)
+    } else {
+      mu_r_cure_new <- mu_r_cure
+      Sigma_r_cure_new <- Sigma_r_cure
+      beta_cure_new <- beta_cure
+      sigma_y_cure_sq_new <- sigma_y_cure_sq
+    }
 
     Q_function_value <- wrapped_Q_function(
       x = mu_r,
