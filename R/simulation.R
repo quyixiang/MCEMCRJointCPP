@@ -305,3 +305,199 @@ CRsimulation <- function(
   )
   return(list(survdat = survdat, longdat = longdat, simulation.para = simulation.para))
 }
+
+
+
+CRsimulation_fixed_visittime <- function(
+    fmla.tte, fmla.long,# fmla.long.cured,
+    bootstrap = FALSE, bootstrapfrom = NULL, id.name = "id",
+    beta.tte, scale.tte = NULL, shape.tte = NULL,
+    normal.tte = FALSE, sd.tte = NULL, # sd.tte should not be null if normal.tte=TRUE
+    beta.y, sd.y, beta.y.cure, sd.y.cured,
+    randeff.mean = c(0.5, 0, -1, 1), randeff.sd = rep(0.2, 4), randeff.corr = NULL,
+    cured.rate = 0.2, cured.mean = c(0, -0.5), cured.sd = c(0.2, 0.2), cured.corr = NULL,
+    n = 100, censor.parameter, time.interval = 0.1, time.interval.sd = 0.02, max_visittime = 2,
+    seed = 1) {
+  # Set the seed for random number generation
+  set.seed(seed)
+  # n_final <- n
+  # n <- 3 * n
+  # First generate X
+  # Get variable names excluding the response variable
+  Xtte.name <- all.vars(fmla.tte)[-c(1:2)]
+  Xlong.name <- all.vars(fmla.long)[-1]
+  Xtte.response.name <- all.vars(fmla.tte)[1]
+  Xtte.indicator.name <- all.vars(fmla.tte)[2]
+  Xlong.response.name <- all.vars(fmla.long)[1]
+  Xall.name <- unique(c(Xtte.name, Xlong.name))
+  if (bootstrap) {
+    id.sel <- sample(bootstrapfrom[[id.name]], size = n, replace = TRUE)
+    
+    # Initialize empty data frame
+    X <- data.frame(matrix(ncol = length(Xall.name), nrow = 0))
+    colnames(X) <- Xall.name
+    
+    # Loop through each ID in id.sel and bind the rows to X
+    for (id in id.sel) {
+      X <- rbind(X, bootstrapfrom[bootstrapfrom[[id.name]] == id, Xall.name, drop = FALSE]) %>% as.matrix()
+    }
+    row.names(X) <- c(1:n)
+  } else {
+    # Create a matrix with values from a standard normal distribution
+    X <- matrix(rnorm(n * length(Xall.name), mean = 0, sd = 1), nrow = n, ncol = length(Xall.name), byrow = FALSE)
+  }
+  # Assign column names from Xtte.name to the matrix
+  colnames(X) <- Xall.name
+  X <- data.frame(X)
+  fmla.tte.rhs <- as.formula(paste("~", deparse(fmla.tte[[3]])))
+  fmla.long.rhs <- as.formula(paste("~", deparse(fmla.long[[3]])))
+  Xtte <- model.matrix(fmla.tte.rhs, data = X)
+  Xlong <- model.matrix(fmla.long.rhs, data = X)
+  Xlong.name.intercept <- colnames(Xlong)
+  X_combined <- cbind(Xtte, Xlong)
+  X_combined_df <- as.data.frame(X_combined)
+  X_combined_unique <- X_combined_df %>%
+    select(unique(colnames(X_combined_df)))
+  X.model <- as.matrix(X_combined_unique)
+  
+  # Generate TTE data
+  id <- c(1:n)
+  survdat <- as.data.frame(X.model)
+  survdat$id <- id
+  survdat <- survdat[, c("id", names(survdat)[!names(survdat) %in% "id"])]
+  if (normal.tte) {
+    survdat$event_years <- exp(rnorm(n = n, mean = Xtte %*% beta.tte, sd = sd.tte))
+  } else {
+    survdat$event_years <- rweibullph(Xtte, beta.tte, scale.tte, scale.tte)
+  }
+  
+  survdat$id <- 1:nrow(survdat)
+  
+  # Generate cured indicator first and then decide which one is censored
+  survdat$cured <- rbern(n, cured.rate)
+  survdat[survdat$cured == 1, 'event_years'] <- Inf
+  
+  # Add censor data (the name of the outcome should be the same with the fmla.tte)
+  set.seed(seed)
+  survdat$censor_years <- rexp(nrow(survdat), censor.parameter)
+  survdat[[Xtte.indicator.name]] <- ifelse(survdat$event_years <= survdat$censor_years, 1, 0)
+  survdat[[Xtte.response.name]] <- pmin(survdat$censor_years, survdat$event_years)
+  
+  
+  # Generate random effects
+  if (!is.null(randeff.corr)) {
+    randeff.corr <- matrix(randeff.corr, nrow = 4, ncol = 4)
+  } else {
+    set.seed(seed)
+    randeff.corr <- randcorr(4)
+  }
+  
+  randeff.cov <- diag(randeff.sd) %*% randeff.corr %*% diag(randeff.sd)
+  randeff <- rptmvn(randeff.mean, randeff.cov, 0, survdat$event_years)
+  
+  # Generate random effects for cured individuals
+  if (!is.null(cured.corr)){
+    cured.corr <- matrix(cured.corr, nrow = 2, ncol = 2)
+  } else {
+    set.seed(seed)
+    cured.corr <- randcorr(2)
+  }
+  
+  cured.cov <- diag(cured.sd) %*% cured.corr %*% diag(cured.sd)
+  randeff.cured <- mvtnorm::rmvnorm(n, mean = cured.mean, sigma = cured.cov)
+  colnames(randeff.cured) <- c("b0_cured", "b1_cured")
+  survdat <- cbind(survdat, randeff, randeff.cured)
+  
+  survdat$nvisits <- ceiling(max_visittime / time.interval)
+  
+  survdat <- survdat %>% filter(nvisits > 0)
+  
+  
+  # Generate longitudinal data
+  longdat <- survdat %>%
+    filter(nvisits > 0)
+  rep.indx <- lapply(1:nrow(longdat), function(i) rep(longdat$id[i], longdat$nvisits[i])) %>% unlist()
+  
+  set.seed(seed)
+  longdat <- longdat[rep.indx, ] %>%
+    group_by(id) %>%
+    mutate(visitnum = row_number()) %>%
+    rowwise() %>%
+    mutate(rand_val = abs(rnorm(1, mean = 0, sd = time.interval.sd))) %>%
+    mutate(visittime = abs(time.interval * visitnum))
+  
+  # at least one visit for each subject
+  longdat <- longdat %>%
+    mutate(visittime = if_else(nvisits %in% c(1,2) & visitnum == 1,
+                               0.1 * get(as.character(Xtte.response.name)),
+                               visittime))
+  
+  longdat <- longdat %>%
+    ungroup() %>%
+    mutate(
+      delta = visittime - omega,
+      eta_re = b1 + if_else(delta < 0, b2 * delta, b3 * delta)
+    ) %>%
+    rowwise() %>%
+    mutate(
+      eta_fe = sum(c_across(all_of(Xlong.name.intercept)) * beta.y),
+      y_uncured = rnorm(1, mean = eta_fe + eta_re, sd = sd.y)
+    )
+  
+  longdat <- longdat %>% 
+    rowwise() %>%
+    mutate(
+      eta_fe_cure = sum(c_across(all_of(Xlong.name.intercept)) * beta.y.cure),
+      y_cured = eta_fe_cure + rnorm(1, mean = b0_cured + b1_cured * visittime, sd = sd.y.cured))
+  
+  longdat <- longdat %>%
+    mutate(
+      !!sym(Xlong.response.name) := case_when(
+        cured == 0 ~ y_uncured,
+        TRUE ~ y_cured
+      )
+    )
+  # Make the maximum of long data less than the event/censor time
+  # longdat <- longdat %>% filter(visittime <= !!sym(Xtte.response.name))
+  
+  # Get the maximum row number for each id
+  longdat <- longdat %>%
+    group_by(id) %>%
+    mutate(nvisits_aftercensor = max(row_number())) %>%
+    ungroup()
+  survdat <- merge(survdat, longdat %>% select(id, nvisits_aftercensor) %>% distinct(id, .keep_all = TRUE))
+  
+  # we only keep these subjects
+  # final_id <- unique(longdat$id)[1:n_final]
+  # longdat <- longdat %>% filter(id %in% final_id)
+  # survdat <- survdat %>% filter(id %in% final_id)
+  
+  cat(
+    paste0(
+      "Number of Censor: ", sum(survdat[[Xtte.indicator.name]] == 0), "\nNumber of Observation: ", sum(survdat[[Xtte.indicator.name]] == 1),
+      "\nProportion of Censor: ", sum(survdat[[Xtte.indicator.name]] == 0) / nrow(survdat), "\n"
+    )
+  )
+  
+  # We also need to save the initial parameters finally
+  rownames(randeff.corr) <- c("omega", "b1", "b2", "b3")
+  colnames(randeff.corr) <- c("omega", "b1", "b2", "b3")
+  # randeff.corr.upper <- randeff.corr[upper.tri(randeff.corr, diag = TRUE)]
+  # names(randeff.corr.upper) <- paste("randeff.corr[", rownames(randeff.corr)[row(randeff.corr)[upper.tri(randeff.corr, diag = TRUE)]],
+  #   ",", colnames(randeff.corr)[col(randeff.corr)[upper.tri(randeff.corr, diag = TRUE)]], "]",
+  #   sep = ""
+  # )
+  
+  simulation.para <- c(
+    beta.tte = beta.tte,
+    scale.tte = scale.tte,
+    shape.tte = shape.tte,
+    beta.y = beta.y,
+    sd.y = sd.y,
+    randeff.mean = randeff.mean,
+    randeff.sd = randeff.sd,
+    randeff.corr = randeff.corr,
+    cured.rate = cured.rate
+  )
+  return(list(survdat = survdat, longdat = longdat, simulation.para = simulation.para))
+}
